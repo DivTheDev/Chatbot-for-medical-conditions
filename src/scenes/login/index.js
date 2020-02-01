@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Button, TextInput, View, StyleSheet } from 'react-native';
+import { Button, TextInput, View, StyleSheet } from 'react-native';
 import { postLogin } from '_services';
 
 export default class LoginScreen extends Component {
@@ -16,7 +16,9 @@ export default class LoginScreen extends Component {
   onLogin() {
     postLogin(this.state.username, this.state.password).then(response => {
       this.setState({ loggedIn: response.data.login }, () => {
-        this.props.navigation.navigate('Home');
+        if (response.data.login) {
+          this.props.navigation.navigate('Home');
+        }
       });
     }).catch(err => {
       console.log(err);
@@ -32,6 +34,7 @@ export default class LoginScreen extends Component {
           placeholder={'Username'}
           style={styles.input}
         />
+
         <TextInput
           value={this.state.password}
           onChangeText={(password) => this.setState({ password })}

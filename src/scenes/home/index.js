@@ -1,14 +1,40 @@
-import React from 'react';
-import {SafeAreaView, Text, TouchableHighlight} from 'react-native';
+import React, { Component } from 'react';
+import { Button, View, StyleSheet } from 'react-native';
 
-const HomeScreen = ({navigation}) => (
-  <SafeAreaView>
-    <Text>Screen: Home</Text>
+export default class HomeScreen extends Component {
 
-    <TouchableHighlight onPress={() => navigation.navigate('About')}>
-      <Text>Go to home</Text>
-    </TouchableHighlight>
-  </SafeAreaView>
-);
+  logOut() {
+    this.props.navigation.navigate('Login');
+  }
 
-export default HomeScreen
+  render() {
+    return (
+      <View style={styles.container}>
+        <Button
+          title={'Symptom Check'}
+          color={styles.regularButton.color}
+        />
+        <Button
+          title={'Log out'}
+          color={styles.logOutButton.color}
+          onPress={this.logOut.bind(this)}
+        />
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ecf0f1',
+  },
+  regularButton: {
+    color: '#f194ff',
+  },
+  logOutButton: {
+    color: 'black',
+  },
+});

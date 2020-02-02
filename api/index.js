@@ -10,7 +10,6 @@ AWS.config.getCredentials(function(err) {
 
 var dynamodb = new AWS.DynamoDB();
 
-const SALT_ROUNDS = 10;
 const app = express();
 app.use(bodyParser.urlencoded({
     extended: true
@@ -36,22 +35,69 @@ app.post('/login', (req, res) => {
         Key: {
             username: { S: username.toLowerCase() },
         },
-        ProjectionExpression: 'password',
+        ProjectionExpression: 'password, admin',
     };
 
     dynamodb.getItem(params, function (err, data) {
         if (err) {
             return res.status(500).send(err);
-        } else
+        } else {
             if (isEmpty(data.Item)) {
                 return res.status(500).send('User does not exist');
             }
 
             bcrypt.compare(password, data.Item['password']['S'], function(err, ret) {
-                return res.status(200).json({ 'login' : ret });
+                let isAdmin = false;
+                if (!isEmpty(data.Item['admin'])) {
+                    isAdmin = data.Item['admin']['BOOL'];
+                }
+
+                return res.status(200).json(
+                    { 'login' : ret, 'isAdmin' : isAdmin }
+                );
             });
         }
-    );
+    });
+});
+
+app.get('/conditions-per-user', (req, res) => {
+    getAllFromDB('medical_conditions')
+    .then(medicalConditions => {
+        if (isEmpty(medicalConditions)) {
+            return res.status(500).send('No medical conditions found');
+        }
+    
+        params = {
+            TableName: 'user_conditions',
+        };
+    
+        conditionsPerUser = [];
+        dynamodb.scan(params, function (err, data) {
+            if (err) {
+                return res.status(500).send(err);
+            } else {
+                data.Items.forEach(function(conditionPerUser) {
+                    let userConditions = [];
+                    conditionPerUser.conditions['NS'].forEach(function(medicalCondition) {
+                        userConditions.push(
+                            medicalConditions.find(x => x.id == medicalCondition).name
+                        );
+                    });
+
+                    conditionsPerUser.push(
+                        {
+                            key: conditionPerUser.user.S,
+                            conditions: userConditions,
+                        }
+                    );
+                });
+            }
+    
+            return res.status(200).json(
+                { 'data' : conditionsPerUser }
+            );
+        });
+    });
 });
 
 app.listen(PORT, () => {
@@ -60,4 +106,17 @@ app.listen(PORT, () => {
 
 function isEmpty(value) {
     return (value == null || value === 'undefined' || value.length === 0);
+}
+
+async function getAllFromDB(tableName) {
+    var docClient = new AWS.DynamoDB.DocumentClient();
+    params = {
+      TableName: tableName,
+    };
+  
+    var objectPromise = await docClient.scan(params).promise().then((data) => {
+      return data.Items 
+    });
+  
+    return objectPromise;
 }

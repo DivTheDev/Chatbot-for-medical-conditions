@@ -17,7 +17,9 @@ export default class LoginScreen extends Component {
     postLogin(this.state.username, this.state.password).then(response => {
       this.setState({ loggedIn: response.data.login }, () => {
         if (response.data.login) {
-          this.props.navigation.navigate('Home');
+          this.props.navigation.navigate('Home', {
+            isAdmin: response.data.isAdmin,
+          });
         }
       });
     }).catch(err => {

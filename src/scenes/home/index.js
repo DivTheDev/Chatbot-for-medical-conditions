@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
 import { Button, View, StyleSheet } from 'react-native';
+import AdminScreen from '../admin_dashboard'
 
 export default class HomeScreen extends Component {
-
   logOut() {
     this.props.navigation.navigate('Login');
   }
 
   render() {
+    if (this.props.navigation.state.params.isAdmin) {
+      return (
+        <AdminScreen admin={this.props}/>
+      )
+    }
+
     return (
       <View style={styles.container}>
         <Button

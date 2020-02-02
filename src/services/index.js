@@ -8,3 +8,7 @@ export function postLogin(username, password) {
         password: password,
     });
 }
+
+export function getConditionsPerUser() {
+    return axios.get(URL + 'conditions-per-user', {});
+}

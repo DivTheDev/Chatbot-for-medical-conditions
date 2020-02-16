@@ -10,10 +10,10 @@ const TabNavigatorConfig = {
 };
 
 const RouteConfigs = {
-  Home:{
+  Home: {
     screen: HomeScreen,
   },
-  About:{
+  About: {
     screen: AboutScreen,
   },
 };

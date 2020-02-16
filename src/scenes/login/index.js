@@ -35,6 +35,7 @@ export default class LoginScreen extends Component {
           onChangeText={(username) => this.setState({ username })}
           placeholder={'Username'}
           style={styles.input}
+          returnKeyType={'done'}
         />
 
         <TextInput
@@ -43,6 +44,7 @@ export default class LoginScreen extends Component {
           placeholder={'Password'}
           secureTextEntry={true}
           style={styles.input}
+          returnKeyType={'done'}
         />
         
         <Button

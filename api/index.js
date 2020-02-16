@@ -113,12 +113,13 @@ app.post('/chat', (req, res) => {
   };
 
   comprehend.classifyDocument(params, function (err, data) {
-    if (err) console.log(err, err.stack); // an error occurred
-    else console.log(data);           // successful response
-
-    return res.status(200).json(
-      { 'data': data }
-    );
+    if (err) {
+      return res.status(500).send(err);
+    } else {
+      return res.status(200).json(
+        { condition: data.Classes[0].Name }
+      );
+    }
   });
 });
 

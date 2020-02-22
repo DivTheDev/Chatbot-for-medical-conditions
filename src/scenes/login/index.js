@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, TextInput, View, StyleSheet } from 'react-native';
+import { Button, TextInput, View, StyleSheet, ImageBackground, } from 'react-native';
 import { postLogin } from '_services';
 
 export default class LoginScreen extends Component {
@@ -30,11 +30,12 @@ export default class LoginScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+      <ImageBackground source={require('../../components/resources/login_background.png')} style={styles.backgroundImage}>
         <TextInput
           value={this.state.username}
           onChangeText={(username) => this.setState({ username })}
           placeholder={'Username'}
-          style={styles.input}
+          style={styles.textInput}
           returnKeyType={'done'}
         />
 
@@ -43,15 +44,17 @@ export default class LoginScreen extends Component {
           onChangeText={(password) => this.setState({ password })}
           placeholder={'Password'}
           secureTextEntry={true}
-          style={styles.input}
+          style={styles.textInput}
           returnKeyType={'done'}
         />
-        
-        <Button
+        <View style={styles.loginView}>
+          <Button
           title={'Login'}
-          style={styles.input}
+          color={styles.loginView.color}
           onPress={this.onLogin.bind(this)}
-        />
+          />
+        </View>
+      </ImageBackground>
       </View>
     );
   }
@@ -62,14 +65,26 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
   },
-  input: {
+  backgroundImage:{
+    width: '100%',
+    height: '100%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  textInput: {
+    marginLeft: 24,
     width: 200,
     height: 44,
-    padding: 10,
     borderWidth: 1,
+    textAlign: 'center',
     borderColor: 'black',
     marginBottom: 10,
+  },
+  loginView: {
+    position: 'absolute',
+    bottom: 200,
+    alignSelf:'center',
+    color: 'red',
   },
 });

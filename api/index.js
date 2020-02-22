@@ -108,7 +108,7 @@ app.post('/chat', (req, res) => {
   }
 
   var params = {
-    EndpointArn: 'arn:aws:comprehend:eu-west-1:797583255773:document-classifier-endpoint/symptoms',
+    EndpointArn: 'arn:aws:comprehend:eu-west-1:797583255773:document-classifier-endpoint/Symptioms-AI',
     Text: text,
   };
 

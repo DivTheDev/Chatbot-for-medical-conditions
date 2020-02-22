@@ -8,17 +8,23 @@ const DOCTOR_NAME = 'Dr Costa';
 const STARTING_MESSAGE = `Hello, ${DOCTOR_NAME} here, what seems to be the problem?`;
 const LOADING_MESSAGE = `Thanks, ${DOCTOR_NAME} is going to take a look...`;
 const MEDICAL_CONDITION_FOUND_MESSAGE = `It seems like you may have $MEDICAL_CONDITION, reply yes if you would like to inform your doctor.`;
-const INFORM_DOCTOR_MESSAGE = `Thanks, your doctor has been informed.`
+const INFORM_DOCTOR_MESSAGE_YES = `Thanks, your doctor has been informed.`
+const NEXT_SYMPTOM_MESSAGE = `Would you like to inform us of any other symptoms?`
+const NEW_SYMPTOM = `Please describe your symptom.`
 
 const STRING_VARIABLES = {
   MEDICAL_CONDITION: '$MEDICAL_CONDITION',
 };
 
 const CHAT_ORDER = [
-  STARTING_MESSAGE,
-  LOADING_MESSAGE,
-  MEDICAL_CONDITION_FOUND_MESSAGE,
-  INFORM_DOCTOR_MESSAGE
+  { text: STARTING_MESSAGE, userCanReply: true },
+  { text: LOADING_MESSAGE, userCanReply: false },
+  { text: MEDICAL_CONDITION_FOUND_MESSAGE, userCanReply: true },
+  { text: INFORM_DOCTOR_MESSAGE_YES, userCanReply: false },
+  { text: NEXT_SYMPTOM_MESSAGE, userCanReply: true },
+  { text: NEW_SYMPTOM, userCanReply: true },
+  { text: LOADING_MESSAGE, userCanReply: false },
+  { text: MEDICAL_CONDITION_FOUND_MESSAGE, userCanReply: true },
 ];
 
 const CHAT_SENDER = { User: 'user', System: 'system' };
@@ -29,24 +35,26 @@ export default class SymptomsChecker extends Component {
 
     this.state = {
       text: '',
+      lastUserInput: '',
       conversation: [],
       enableTextInput: false,
       chatIndex: 0,
+      symptoms: [],
     };
 
     this.submitText = this.submitText.bind(this);
     this.clearUserInput = this.clearUserInput.bind(this);
     this.renderConversation = this.renderConversation.bind(this);
-    this.startConversation = this.startConversation.bind(this);
+    this.startConversation = this.getSymptomFromUser.bind(this);
     this.appendToConversation = this.appendToConversation.bind(this);
     this.respondToUser = this.respondToUser.bind(this);
     this.getMedicalCondition = this.getMedicalCondition.bind(this);
-    this.getLastUserInput = this.getLastUserInput.bind(this);
   }
 
   async submitText(e) {
-    this.clearUserInput();
-    if (e.nativeEvent.text.length > 0) {
+    const input = e.nativeEvent.text;
+    if (input.length > 0) {
+      this.clearUserInput();
       await this.appendToConversation(e.nativeEvent.text, CHAT_SENDER.User);
       setTimeout(() => {
         this.respondToUser();
@@ -55,77 +63,86 @@ export default class SymptomsChecker extends Component {
   }
 
   componentDidMount() {
-    this.startConversation();
+    this.getSymptomFromUser();
   }
 
-  clearUserInput() {
-    this.setState({ text: '' });
+  async clearUserInput(fully = false) {
+    this.setState({ 
+      lastUserInput: fully ? '' : this.state.text,
+      text: '' 
+    });
   }
 
-  startConversation() {
+  getSymptomFromUser() {
     setTimeout(() => {
-      this.appendToConversation(STARTING_MESSAGE, CHAT_SENDER.System);
+      const chat = CHAT_ORDER[this.state.chatIndex];
+      this.appendToConversation(chat.text, CHAT_SENDER.System, chat.userCanReply);
     }, 1250);
   }
 
   async appendToConversation(text, from, enableUserInput = true) {
-    let conversationObj = {
-      text: text,
-      from: from
-    };
+    if (typeof text !== 'undefined' && text.length > 0) {
+      let conversationObj = {
+        text: text,
+        from: from
+      };
 
-    let newConversation = this.state.conversation.concat(conversationObj);
-    let newChatIndex = this.state.chatIndex + 1;
-    await this.setState({
-      conversation: newConversation,
-      enableTextInput: enableUserInput,
-      chatIndex: newChatIndex,
-    });
+      let newConversation = this.state.conversation.concat(conversationObj);
+      let newChatIndex = this.state.chatIndex;
+      if (conversationObj.from === CHAT_SENDER.System) {
+        newChatIndex = this.state.chatIndex + 1;
+      }
 
-    if (newChatIndex === 3) {
-      this.getMedicalCondition();
-    }
-
-    if (newChatIndex === 5) {
-      this.informDoctor();
+      await this.setState({
+        conversation: newConversation,
+        enableTextInput: enableUserInput,
+        chatIndex: newChatIndex,
+      });
+    
+      if (CHAT_ORDER[newChatIndex - 1].text === LOADING_MESSAGE) {
+        this.getMedicalCondition();
+      } else if (CHAT_ORDER[newChatIndex].text === NEW_SYMPTOM) {
+        console.log('NEW SHIT');
+        await this.clearUserInput(true);
+      } else if (CHAT_ORDER[newChatIndex].userCanReply === true) {
+        console.log('HERE2')
+        await this.getUserResponse();
+      }
     }
   }
 
-  respondToUser(text, userCanReply) {
+  respondToUser(text, userCanReply = false) {
     if (typeof text !== 'undefined' && text !== null && text.length > 0) {
-      this.appendToConversation(text, CHAT_SENDER.System, userCanReply);
+      setTimeout(() => {
+        this.appendToConversation(text, CHAT_SENDER.System, userCanReply);
+      }, 1250);
     } else {
-      this.appendToConversation(CHAT_ORDER[this.state.chatIndex - 1], CHAT_SENDER.System, userCanReply);
+      setTimeout(() => {
+        this.appendToConversation(CHAT_ORDER[this.state.chatIndex].text, CHAT_SENDER.System, CHAT_ORDER[this.state.chatIndex].userCanReply);
+      }, 1250);
     }
   }
 
   getMedicalCondition() {
-    getSymptom(this.getLastUserInput()).then(response => {
-      const text = MEDICAL_CONDITION_FOUND_MESSAGE.replace(STRING_VARIABLES.MEDICAL_CONDITION, response.data.condition);
-      setTimeout(() => {
-        this.respondToUser(text, true);
-      }, 1250);
+    console.log('GET MEDICAL CONDITIONS')
+    getSymptom(this.state.lastUserInput).then(response => {
+      const text = CHAT_ORDER[this.state.chatIndex].text.replace(STRING_VARIABLES.MEDICAL_CONDITION, response.data.condition);
+      this.state.symptoms = this.state.symptoms.concat(response.data.condition);
+      this.respondToUser(text, CHAT_ORDER[this.state.chatIndex].userCanReply);
     }).catch(err => {
       console.log(err);
     });
   }
 
-  informDoctor() {
-    let userResponse = this.getLastUserInput().toLowerCase();
+  async getUserResponse() {
+    console.log('getUserResponse');
+    console.log(this.state);
+    let userResponse = this.state.lastUserInput.toLowerCase();
+    await this.clearUserInput(true);
+    console.log(userResponse === 'yes' || userResponse === 'y');
     if (userResponse === 'yes' || userResponse === 'y') {
-      
+      this.respondToUser();
     }
-  }
-
-  getLastUserInput() {
-    const reversedConversation = this.state.conversation.reverse();
-    let lastUserInput = '';
-    reversedConversation.forEach(element => {
-      if (element.from === CHAT_SENDER.User) {
-        lastUserInput = element.text;
-      }
-    });
-    return lastUserInput;
   }
 
   renderConversation() {
@@ -168,12 +185,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'column',
   },
+
   container: {
     flex: 1,
     backgroundColor: '#ecf0f1',
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
+
   input: {
     width: 350,
     height: 44,

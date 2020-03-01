@@ -49,6 +49,7 @@ export default class SymptomsChecker extends Component {
     this.appendToConversation = this.appendToConversation.bind(this);
     this.respondToUser = this.respondToUser.bind(this);
     this.getMedicalCondition = this.getMedicalCondition.bind(this);
+    this.submitDataToDoctor = this.submitDataToDoctor.bind(this);
   }
 
   async submitText(e) {
@@ -98,14 +99,18 @@ export default class SymptomsChecker extends Component {
         enableTextInput: enableUserInput,
         chatIndex: newChatIndex,
       });
+
+      // We have reached the end of the convo
+      if (CHAT_ORDER[newChatIndex] === undefined || CHAT_ORDER[newChatIndex] === 'undefined' || CHAT_ORDER[newChatIndex] === null) {
+        this.submitDataToDoctor();
+        return;
+      }
     
-      if (CHAT_ORDER[newChatIndex - 1].text === LOADING_MESSAGE) {
+      if (CHAT_ORDER[newChatIndex].text === MEDICAL_CONDITION_FOUND_MESSAGE) {
         this.getMedicalCondition();
       } else if (CHAT_ORDER[newChatIndex].text === NEW_SYMPTOM) {
-        console.log('NEW SHIT');
         await this.clearUserInput(true);
       } else if (CHAT_ORDER[newChatIndex].userCanReply === true) {
-        console.log('HERE2')
         await this.getUserResponse();
       }
     }
@@ -118,28 +123,34 @@ export default class SymptomsChecker extends Component {
       }, 1250);
     } else {
       setTimeout(() => {
-        this.appendToConversation(CHAT_ORDER[this.state.chatIndex].text, CHAT_SENDER.System, CHAT_ORDER[this.state.chatIndex].userCanReply);
+        const chat = CHAT_ORDER[this.state.chatIndex];
+        if (chat !== 'undefined' && chat !== null) {
+          this.appendToConversation(chat.text, CHAT_SENDER.System, chat.userCanReply);
+        }
       }, 1250);
     }
   }
 
+  submitDataToDoctor() {
+    console.log(this.state);
+  }
+
   getMedicalCondition() {
-    console.log('GET MEDICAL CONDITIONS')
     getSymptom(this.state.lastUserInput).then(response => {
-      const text = CHAT_ORDER[this.state.chatIndex].text.replace(STRING_VARIABLES.MEDICAL_CONDITION, response.data.condition);
-      this.state.symptoms = this.state.symptoms.concat(response.data.condition);
-      this.respondToUser(text, CHAT_ORDER[this.state.chatIndex].userCanReply);
+      const chat = CHAT_ORDER[this.state.chatIndex];
+      if (chat !== 'undefined') {
+        const text = CHAT_ORDER[this.state.chatIndex].text.replace(STRING_VARIABLES.MEDICAL_CONDITION, response.data.condition);
+        this.state.symptoms = this.state.symptoms.concat(response.data.condition);
+        this.respondToUser(text, CHAT_ORDER[this.state.chatIndex].userCanReply); 
+      }
     }).catch(err => {
       console.log(err);
     });
   }
 
   async getUserResponse() {
-    console.log('getUserResponse');
-    console.log(this.state);
     let userResponse = this.state.lastUserInput.toLowerCase();
     await this.clearUserInput(true);
-    console.log(userResponse === 'yes' || userResponse === 'y');
     if (userResponse === 'yes' || userResponse === 'y') {
       this.respondToUser();
     }

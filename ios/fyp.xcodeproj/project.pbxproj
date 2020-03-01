@@ -7,18 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0644ED7F35A6736141448AEB /* libPods-fyp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6485E63F81EE928740794ED /* libPods-fyp.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		DB04E650691AF8156ABDE405 /* libPods-fyp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F63A9339B6BC3D7AAA18F917 /* libPods-fyp.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* fypTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = fypTests.m; sourceTree = "<group>"; };
-		080CE05AF319E9EA27138E32 /* libPods-fypTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-fypTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* fyp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fyp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = fyp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = fyp/AppDelegate.m; sourceTree = "<group>"; };
@@ -26,19 +25,11 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = fyp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = fyp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = fyp/main.m; sourceTree = "<group>"; };
-		29772B21196FF90F802A7880 /* Pods-fyp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fyp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-fyp-tvOS/Pods-fyp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		5190875C61EFCD300E7DE705 /* Pods-fyp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fyp.debug.xcconfig"; path = "Target Support Files/Pods-fyp/Pods-fyp.debug.xcconfig"; sourceTree = "<group>"; };
-		54F865090E0083BB9B0D9B75 /* libPods-fyp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-fyp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		569D0595FA459F37F2E40831 /* Pods-fypTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fypTests.release.xcconfig"; path = "Target Support Files/Pods-fypTests/Pods-fypTests.release.xcconfig"; sourceTree = "<group>"; };
-		8634B4DE62BA0B65E461275B /* libPods-fyp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-fyp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		967BF98A691671F86B0AAD0C /* Pods-fyp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fyp.release.xcconfig"; path = "Target Support Files/Pods-fyp/Pods-fyp.release.xcconfig"; sourceTree = "<group>"; };
-		BC2BA9EB8EC522EE2C407BA3 /* Pods-fyp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fyp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-fyp-tvOS/Pods-fyp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		C9CD977A8B93D97D6EFF41FD /* Pods-fyp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fyp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-fyp-tvOSTests/Pods-fyp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		DDB8A10EF96AA26C2EB2AE5A /* Pods-fypTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fypTests.debug.xcconfig"; path = "Target Support Files/Pods-fypTests/Pods-fypTests.debug.xcconfig"; sourceTree = "<group>"; };
+		2C1641C6BB14B4A05E886852 /* Pods-fyp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fyp.release.xcconfig"; path = "Target Support Files/Pods-fyp/Pods-fyp.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		F6485E63F81EE928740794ED /* libPods-fyp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-fyp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		FB615321B90CC619284B3FBC /* Pods-fyp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fyp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-fyp-tvOSTests/Pods-fyp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F52A542F84B1979B2A8255FA /* Pods-fyp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-fyp.debug.xcconfig"; path = "Target Support Files/Pods-fyp/Pods-fyp.debug.xcconfig"; sourceTree = "<group>"; };
+		F63A9339B6BC3D7AAA18F917 /* libPods-fyp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-fyp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,7 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0644ED7F35A6736141448AEB /* libPods-fyp.a in Frameworks */,
+				DB04E650691AF8156ABDE405 /* libPods-fyp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,14 +78,8 @@
 		2C0CB0D735658802A9479558 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				5190875C61EFCD300E7DE705 /* Pods-fyp.debug.xcconfig */,
-				967BF98A691671F86B0AAD0C /* Pods-fyp.release.xcconfig */,
-				29772B21196FF90F802A7880 /* Pods-fyp-tvOS.debug.xcconfig */,
-				BC2BA9EB8EC522EE2C407BA3 /* Pods-fyp-tvOS.release.xcconfig */,
-				FB615321B90CC619284B3FBC /* Pods-fyp-tvOSTests.debug.xcconfig */,
-				C9CD977A8B93D97D6EFF41FD /* Pods-fyp-tvOSTests.release.xcconfig */,
-				DDB8A10EF96AA26C2EB2AE5A /* Pods-fypTests.debug.xcconfig */,
-				569D0595FA459F37F2E40831 /* Pods-fypTests.release.xcconfig */,
+				F52A542F84B1979B2A8255FA /* Pods-fyp.debug.xcconfig */,
+				2C1641C6BB14B4A05E886852 /* Pods-fyp.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -104,10 +89,7 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				F6485E63F81EE928740794ED /* libPods-fyp.a */,
-				54F865090E0083BB9B0D9B75 /* libPods-fyp-tvOS.a */,
-				8634B4DE62BA0B65E461275B /* libPods-fyp-tvOSTests.a */,
-				080CE05AF319E9EA27138E32 /* libPods-fypTests.a */,
+				F63A9339B6BC3D7AAA18F917 /* libPods-fyp.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -149,7 +131,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "fyp" */;
 			buildPhases = (
-				D77FFE36E6B0820150741C26 /* [CP] Check Pods Manifest.lock */,
+				11247AB45EFF30DDC45BDEC3 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
@@ -225,7 +207,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		D77FFE36E6B0820150741C26 /* [CP] Check Pods Manifest.lock */ = {
+		11247AB45EFF30DDC45BDEC3 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -295,7 +277,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5190875C61EFCD300E7DE705 /* Pods-fyp.debug.xcconfig */;
+			baseConfigurationReference = F52A542F84B1979B2A8255FA /* Pods-fyp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
@@ -316,7 +298,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 967BF98A691671F86B0AAD0C /* Pods-fyp.release.xcconfig */;
+			baseConfigurationReference = 2C1641C6BB14B4A05E886852 /* Pods-fyp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Button, View, StyleSheet, Text } from 'react-native';
 import { SafeAreaView, FlatList } from 'react-navigation';
 import { getConditionsPerUser } from '_services';
-import { max } from 'react-native-reanimated';
 
 function Item({data}) {
   return(

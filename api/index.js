@@ -123,6 +123,44 @@ app.post('/chat', (req, res) => {
   });
 });
 
+app.post('/submitSymptoms', (req, res) => {
+  const symptoms = req.body.symptoms;
+  if (isEmpty(symptoms)) {
+    return res.status(500).send('Symptoms has not been provided');
+  }
+
+  var titleObject = {};
+  var index = 0;
+  symptoms.forEach(function(value) {
+      index++;
+      var titleKey = ":name"+index;
+      titleObject[titleKey.toString()] = value;
+  });
+
+  console.log(titleObject);
+  let params = {
+    TableName: 'symptoms',
+    FilterExpression : "name IN ("+Object.keys(titleObject).toString()+ ")",
+    ProjectionExpression: 'id',
+  };
+
+  dynamodb.getItem(params, function (err, data) {
+    if (err) {
+      console.log(err);
+      return res.status(500).send(err);
+    } else {
+      console.log(data.Item);
+      if (isEmpty(data.Item)) {
+        return res.status(500).send('Symptoms does not exist');
+      }
+
+      res.status(200).json(
+        { data: data.Item }
+      );
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log('FYP listening on port ' + PORT)
 });

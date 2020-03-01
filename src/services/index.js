@@ -19,3 +19,8 @@ export function getSymptom(text) {
   });
 }
 
+export function postSymptoms(symptoms) {
+  return axios.post(URL + 'submitSymptoms', {
+    symptoms: symptoms,
+  });
+}

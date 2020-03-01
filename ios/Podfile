@@ -33,22 +33,6 @@ target 'fyp' do
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
-
-
-  target 'fypTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
   use_native_modules!
-end
-
-target 'fyp-tvOS' do
-  # Pods for fyp-tvOS
-
-  target 'fyp-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
 end

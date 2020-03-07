@@ -9,7 +9,7 @@ AWS.config.getCredentials(function (err) {
 });
 
 var dynamodb = new AWS.DynamoDB();
-var comprehend = new AWS.Comprehend();
+var comprehendMedical = new AWS.ComprehendMedical();
 
 const app = express();
 app.use(bodyParser.urlencoded({
@@ -108,16 +108,20 @@ app.post('/chat', (req, res) => {
   }
 
   var params = {
-    EndpointArn: 'arn:aws:comprehend:eu-west-1:797583255773:document-classifier-endpoint/Symptioms-AI',
-    Text: text,
+    Text: text
   };
 
-  comprehend.classifyDocument(params, function (err, data) {
+  comprehendMedical.detectEntities(params, function (err, data) {
     if (err) {
       return res.status(500).send(err);
     } else {
+      const obj = data.Entities.find(obj => obj.Category === 'MEDICAL_CONDITION');
+      if (typeof obj === 'undefined') {
+        return res.status(500).send('Invalid text provided');
+      }
+
       return res.status(200).json(
-        { condition: data.Classes[0].Name }
+        { condition: obj.Text.toUpperCase() }
       );
     }
   });

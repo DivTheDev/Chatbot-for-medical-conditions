@@ -9,6 +9,7 @@ AWS.config.getCredentials(function (err) {
 });
 
 var dynamodb = new AWS.DynamoDB();
+var dynamodbDocClient = new AWS.DynamoDB.DocumentClient();
 var comprehendMedical = new AWS.ComprehendMedical();
 
 const app = express();
@@ -107,7 +108,7 @@ app.post('/chat', (req, res) => {
     return res.status(500).send('Text has not been provided');
   }
 
-  var params = {
+  let params = {
     Text: text
   };
 
@@ -129,38 +130,62 @@ app.post('/chat', (req, res) => {
 
 app.post('/submitSymptoms', (req, res) => {
   const symptoms = req.body.symptoms;
+  const userId = req.body.user;
+  if (isEmpty(userId)) {
+    return res.status(500).send('User has not been provided');
+  }
+
   if (isEmpty(symptoms)) {
     return res.status(500).send('Symptoms has not been provided');
   }
 
-  var titleObject = {};
-  var index = 0;
+  let queryParams = { RequestItems: {} };
+  let keys = [];
   symptoms.forEach(function(value) {
-      index++;
-      var titleKey = ":name"+index;
-      titleObject[titleKey.toString()] = value;
+    let obj = {
+      'name': value
+    }
+
+    keys.push(obj);
   });
 
-  console.log(titleObject);
-  let params = {
-    TableName: 'symptoms',
-    FilterExpression : "name IN ("+Object.keys(titleObject).toString()+ ")",
-    ProjectionExpression: 'id',
+  queryParams.RequestItems['symptoms'] = {
+    Keys: keys,
+    ProjectionExpression: 'id'
   };
 
-  dynamodb.getItem(params, function (err, data) {
+  let newSymptoms = [];
+  dynamodbDocClient.batchGet(queryParams, function (err, data) {
     if (err) {
-      console.log(err);
-      return res.status(500).send(err);
+      return res.status(500).send(err); 
     } else {
-      console.log(data.Item);
-      if (isEmpty(data.Item)) {
-        return res.status(500).send('Symptoms does not exist');
+      if (data.Responses.symptoms.length === 0) {
+        return res.status(500).send('No medical conditions found on the DB');
       }
 
-      res.status(200).json(
-        { data: data.Item }
-      );
+      newSymptoms = data.Responses.symptoms;
+      let result = newSymptoms.map(symptom => String(symptom.id));
+      let params = {
+        'TableName' : 'user_conditions',
+        'Key' : {
+          'user': { 'S': userId.toLowerCase() },
+        },
+        'UpdateExpression' : 'ADD symptom :valuesToAdd',
+        'ExpressionAttributeValues' : {
+          ':valuesToAdd' : { 'NS': result }
+        },
+        ReturnValues:'UPDATED_NEW'
+      }
+
+      dynamodb.updateItem(params, function(err, data) {
+        if (err) {
+          console.log(err);
+          return res.status(500).send(err);
+        } else {
+          console.log(data);
+          return res.status(200);
+        }
+      });
     }
   });
 });

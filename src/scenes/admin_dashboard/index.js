@@ -4,6 +4,7 @@ import { SafeAreaView, FlatList } from 'react-navigation';
 import { getConditionsPerUser } from '_services';
 
 function Item({data}) {
+  console.log(data);
   return(
     <View style={styles.item}>
       <Text style={styles.title} key={data.key}>{data.key}</Text>
@@ -11,6 +12,9 @@ function Item({data}) {
         {data.conditions.map(function(name, index) {
           return <Text key={index}>{name}</Text>;
         })}
+        {data.redFlag &&
+          <Text style={styles.exclamation}>!</Text>
+        }
     </View>
   );
 }
@@ -79,4 +83,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
   },
+  exclamation:{
+    fontSize: 20,
+    color: 'red',
+    justifyContent: 'flex-end',
+    alignSelf: 'flex-end',
+  }
 });

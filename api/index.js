@@ -74,6 +74,7 @@ app.get('/conditions-per-user', (req, res) => {
       };
 
       conditionsPerUser = [];
+      let redFlag = false;
       dynamodb.scan(params, function (err, data) {
         if (err) {
           return res.status(500).send(err);
@@ -81,8 +82,17 @@ app.get('/conditions-per-user', (req, res) => {
           data.Items.forEach(function (conditionPerUser) {
             let userConditions = [];
             conditionPerUser.conditions['NS'].forEach(function (medicalCondition) {
+              let medicalConditionForUser = medicalConditions.find(x => x.id == medicalCondition);
+              if (redFlag === false && medicalConditionForUser['red_flag'] !== null && typeof medicalConditionForUser['red_flag'] !== 'undefined') {
+                conditionPerUser.symptom['NS'].forEach(function (symptom) {
+                  if (medicalConditionForUser['red_flag'].values.includes(Number(symptom))) {
+                    redFlag = true;
+                  }
+                });
+              }
+
               userConditions.push(
-                medicalConditions.find(x => x.id == medicalCondition).name
+                medicalConditionForUser.name
               );
             });
 
@@ -90,11 +100,13 @@ app.get('/conditions-per-user', (req, res) => {
               {
                 key: conditionPerUser.user.S,
                 conditions: userConditions,
+                redFlag: redFlag
               }
             );
           });
         }
 
+        console.log(conditionsPerUser);
         return res.status(200).json(
           { 'data': conditionsPerUser }
         );
@@ -182,7 +194,6 @@ app.post('/submitSymptoms', (req, res) => {
           console.log(err);
           return res.status(500).send(err);
         } else {
-          console.log(data);
           return res.status(200);
         }
       });
